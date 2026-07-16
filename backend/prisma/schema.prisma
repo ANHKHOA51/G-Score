@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+/// Bảng chính lưu điểm thi chi tiết
+model Student {
+  sbd          String  @id @db.VarChar(8)
+  toan         Float?
+  ngu_van      Float?
+  ngoai_ngu    Float?
+  vat_li       Float?
+  hoa_hoc      Float?
+  sinh_hoc     Float?
+  lich_su      Float?
+  dia_li       Float?
+  gdcd         Float?
+  ma_ngoai_ngu String? @db.VarChar(10)
+
+  @@map("student")
+}
+
+/// Bảng lưu tổng điểm theo khối (Ví dụ: A00, B00) để rank Top N siêu tốc
+model StudentGroupScore {
+  sbd        String @db.VarChar(8)
+  groupCode  String @map("group_code") @db.VarChar(10)
+  totalScore Float  @map("total_score")
+
+  @@id([sbd, groupCode])
+  // Index ghép (groupCode, totalScore DESC) để lấy Top N
+  @@index([groupCode, totalScore(sort: Desc)], name: "idx_group_score_ranking")
+  @@map("student_group_score")
+}
+
+/// Bảng thống kê số lượng điểm theo phổ điểm cho từng môn
+model SubjectStatistic {
+  subjectCode    String @id @map("subject_code") @db.VarChar(20)
+  subjectName    String @map("subject_name") @db.VarChar(50)
+  excellentCount Int    @default(0) @map("excellent_count")
+  goodCount      Int    @default(0) @map("good_count")
+  averageCount   Int    @default(0) @map("average_count")
+  poorCount      Int    @default(0) @map("poor_count")
+  totalCount     Int    @default(0) @map("total_count")
+
+  @@map("subject_statistic")
+}
