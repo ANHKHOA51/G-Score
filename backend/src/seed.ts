@@ -18,7 +18,6 @@ async function bootstrap() {
     process.exit(1);
   }
 
-  // Initialize stats map
   const statsMap: Record<string, any> = {};
   for (const subject of SUBJECTS) {
     statsMap[subject.code] = {

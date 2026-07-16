@@ -27,12 +27,10 @@ export class StudentsService {
   async getTopByGroup(groupCode: string): Promise<any> {
     const code = groupCode.toUpperCase();
     
-    // Kiểm tra cache
     if (this.topGroupCache.has(code)) {
       return this.topGroupCache.get(code);
     }
     
-    // Sử dụng $queryRaw để gộp 2 truy vấn (lấy top score & lấy chi tiết student) thành 1 lần gọi DB duy nhất
     const rawResults: any[] = await this.prisma.$queryRaw`
       SELECT s.*, sgs.total_score as "totalScore"
       FROM student_group_score sgs
@@ -63,7 +61,6 @@ export class StudentsService {
       return result;
     });
 
-    // Lưu vào cache
     this.topGroupCache.set(code, finalResult);
     return finalResult;
   }

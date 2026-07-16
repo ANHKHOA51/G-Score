@@ -6,7 +6,6 @@ interface ScoreCardProps {
 export default function ScoreCard({ subjectName, score }: ScoreCardProps) {
   const isNull = score === null || score === undefined;
   
-  // Style based on score value
   let scoreColorClass = "text-tertiary opacity-50";
   if (!isNull) {
     if (score >= 8.0) scoreColorClass = "text-[#22C55E]";
