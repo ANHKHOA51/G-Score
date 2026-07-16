@@ -25,7 +25,7 @@ To get the top 10 students of any group instantly, a **Composite Index** was cre
 ```
 This index clusters the data by `groupCode` and pre-sorts the `totalScore` in descending order. When the API queries the top 10 students, PostgreSQL simply reads the first 10 rows from the index directly, completely eliminating the need to scan or sort millions of records!
 
-### 3. Open-Closed Principle (SOLID)
+### 3. Scalability
 The system is designed to be open for extension but closed for modification. By storing group scores dynamically via a `groupCode` column in the database and managing subject groups through OOP polymorphism (`class GroupA00 extends SubjectGroup`), adding new subject combinations (e.g., A01, D01) requires zero changes to the database schema, core ranking logic, or the API.
 
 ---
